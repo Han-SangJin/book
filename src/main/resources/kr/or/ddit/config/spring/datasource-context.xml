@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+
+	
+	<!-- 1. datasource : connection pool
+		 2. sqlSessionFactoryBean : datasource를 이용하여 mybatis 설정을 담당
+		 3. sqlSessionTemplate : sqlSessionFactory 객체로 부터 생성하며 mybatis를 통해 sql을 실행할 수 있는 객체(sqlSession)	
+	 -->
+	
+	<context:property-placeholder location="classpath:kr/or/ddit/config/db/db.properties"/>
+	
+	<!-- connection pool 역할 -->
+	<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
+		<property name="url" value="${jdbc.url}"/>
+		<property name="driverClassName" value="${jdbc.driver}"/>
+		<property name="username" value="${jdbc.username}"/>
+		<property name="password" value="${jdbc.password}"/>
+	</bean>
+
+	<!-- mybatisUtil 역할 -->
+	<!-- SqlSessionFactroeyBean 객체는 객체를 생성하는 역할을 담당하는 객체
+		 스프링 프레임워크는 스프링 빈을 생성시 객체가 FactoryBean 인터페이스를 구현한 경우
+		 인터페이스에 정의되어 있는 getObject() 메소드가 리턴하는 객체를 스프링 빈으로 등록한다. -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="configLocation" value="classpath:kr/or/ddit/config/db/mybatis-config.xml"/>
+		<property name="dataSource" ref="dataSource"/>
+	</bean>
+	
+	
+	<!-- sqlSession역할 -->
+	<bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg ref="sqlSessionFactory"/>
+	</bean>
+	<!-- SqlSessionFactory는 데이터베이스와의 연결과 SQL의 실행에 대한 모든 것을 가진 가장 중요한 객체다.
+			이 객체가 DataSource를 참조하여 MyBatis와 db 서버를 연동 -->
+
+	
+	
+	
+					<!-- 				이폴더	 java로 		옮겨감 				 -->
+	
+</beans>
+
+
+
+
+
+<!-- 	
+	
+																				
+					
+		DATA SOURCE CONTEXT 는 아마도  스프링 프레임워크를 구성하는 기능요소 7가지중 	srping-orm 에 해당하는것 같다
+																		Object Relational Mapping(데이터 매핑)	
+					 
+		여기에선 mybatis나 hibernate 등 
+					
+		데이터 관리 프로그램과 연결고리를 제공 하지만 DB에 직접 연결되는 것이 아니라 JDBC를 통해 연결이 된다.
+					
+		mybatis 는 DB연결 라이브러리가 아니라 
+					
+					
+		mybatis 에 적어놓은 쿼리문을 매핑(하나의 값을 다른 값으로 대응시키는 것) 해서 DB가 알아 들을수 있도록 해주는 역할이다.
+					
+				- mybatis-config.xml 을 통한 member.xml 이나 baord.xml 같은 쿼리문 파일과 연결 하여 매핑
+					
+					
+					
+		그래서 DATA SOURCE는 mybatis 와 jdbc가 만나는 지점 일뿐 크게 다른 역할은 없는듯 하다.
+				
+				
+	 -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

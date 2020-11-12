@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd">
+
+					<!--		 @Aspect를 xml에 설정		  -->
+	<!-- advice -->
+	<!-- <bean id="profilingAdvice" class="kr.or.ddit.aop.profilingAdvice"/>  -->
+			<!-- 파일 읽을때 시간이 얼마나 걸리는지 AOP로 로깅 해줄 객체 선언  -->
+			
+			
+	<!-- aop 기능선언 여기서 선언한 기능을 상속받은 bean 에서 사용 가능하다. -->
+	<!-- <aop:config>
+		    id를 pointcut  할 부분    표현 = ececution	 
+		<aop:pointcut id="target" expression="execution(* kr.or.ddit..service.*.*(..))"/>
+		<aop:aspect ref="profilingAdvice">	사용할곳 설정 (위에서 객체로 선언한 부분 자동완성기능)
+			<aop:before method="beforeMethod" pointcut-ref="target"/>	시작전 메소드
+			<aop:around method="aroundMethod" pointcut-ref="target"/>	시작전-종료를 감싸는 메소드
+		</aop:aspect> 관점: 측면
+	</aop:config> -->
+ <!-- aop(관점):구성 -->
+		
+	
+	
+	<!-- @Aspect를 부여한 클래스에 대한 설정 처리 -->
+	<aop:aspectj-autoproxy/> 
+	<!-- aop 기능을 대리시킴 -> java 소스중 @Aspect 가 붙은곳만 스캔 -->
+	
+	
+	
+	<!-- @ControllerAdvice --><!-- kr.or.ddit 패키지를 자동 스캔하지만    false 처리하면 수동으로 바뀐다 -->
+	<context:component-scan base-package="kr.or.ddit" use-default-filters="false"> 		
+		<context:include-filter type="annotation" expression="org.aspectj.lang.annotation.Aspect"/>
+										<!-- 어노 테이션이 붙은 부분만 스캔한다. -->
+	</context:component-scan>
+	
+</beans>
+
+
+<!-- 
+	
+	AOP : Aspect Oriented Progreamming     주로 로그 확인용
+		결국은 logging 같은 기능으로 로직이 어떻게 돌아가고있는지 console로 표현해주는 기능 정도 인듯 하다
+		파일이나 리스트 객체를 사용할때는 파일 위치나 갯수 이름등을 logger 등으로 상태를 확인하기 용이하다.
+		
+		
+	
+	Aspect : 공통기능 (관심사를 모듈화 aop)
+	
+	Advice : Aspect 의 기능 자체 (실질적인 기능을 담은 구현체 - aop를 실행할 객체, 패키지위치 설정 -> Bean 으로 객체를 생성해서 aop선언할때 사용 )
+	Joint point : Advice 를 적용해야 되는 부분	( 메서드 진입시점 - Advice 가 끼어들 시점) 
+				- joint point 는 직접적으로 잘 안쓰고 자바에서 어노테이션@Aspect 부분을 joint point 로 보는듯?
+				
+	PointCut : Joint Point의 부분을 실제로 Advice가 적용된 부분 
+	Weaving : Advice 를 행심 기능에 적용하는 행위	(메서드 실행)
+	
+	
+	
+	
+	Aspect(공통모듈기능) 사용할 	위치를 advice 가지정하면 	 joint cut 으로 대략적인 위치를 지정하고
+	joint point(@Aspect)로 클래스명 위에 설정하고 @pointcut으로 advice(실행할위치선언부)와 함께 실행할 메서드 위에 작성한다
+	
+	
+	-메소드에서 자세히 시점을 지정해줄 어노테이션들
+	
+	@Before (이전) : 어드바이스 타겟 메소드가 호출되기 전에 어드바이스 기능을 수행
+	@After (이후) : 타겟 메소드의 결과에 관계없이(즉 성공, 예외 관계없이) 타겟 메소드가 완료 되면 어드바이스 기능을 수행
+	@AfterReturning (정상적 반환 이후)타겟 메소드가 성공적으로 결과값을 반환 후에 어드바이스 기능을 수행
+	@AfterThrowing (예외 발생 이후) : 타겟 메소드가 수행 중 예외를 던지게 되면 어드바이스 기능을 수행
+	@Around (메소드 실행 전후) : 어드바이스가 타겟 메소드를 감싸서 타겟 메소드 호출전과 후에 어드바이스 기능을 수행
+
+
+
+	
+	구현 방법
+	client => proxy => target
+		
+
+
+
+
+
+
+
+ -->	
+

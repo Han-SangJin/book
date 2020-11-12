@@ -1,5 +1,10 @@
+
+
 package kr.or.ddit.member.model;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement(name= "memberVo")
 public class MemberVO {
 	private String memId;		// 회원아이디
 	private int memCd;			// 회원상태코드 0:휴면 1:정상
@@ -86,4 +91,81 @@ public class MemberVO {
 	public void setMemMile(int memMile) {
 		this.memMile = memMile;
 	}
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((addrDetail == null) ? 0 : addrDetail.hashCode());
+		result = prime * result + addrSq;
+		result = prime * result + eMoney;
+		result = prime * result + ((memBir == null) ? 0 : memBir.hashCode());
+		result = prime * result + memCd;
+		result = prime * result + memGender;
+		result = prime * result + ((memHp == null) ? 0 : memHp.hashCode());
+		result = prime * result + ((memId == null) ? 0 : memId.hashCode());
+		result = prime * result + ((memMail == null) ? 0 : memMail.hashCode());
+		result = prime * result + memMile;
+		result = prime * result + ((memNm == null) ? 0 : memNm.hashCode());
+		result = prime * result + ((memPass == null) ? 0 : memPass.hashCode());
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		MemberVO other = (MemberVO) obj;
+		if (addrDetail == null) {
+			if (other.addrDetail != null)
+				return false;
+		} else if (!addrDetail.equals(other.addrDetail))
+			return false;
+		if (addrSq != other.addrSq)
+			return false;
+		if (eMoney != other.eMoney)
+			return false;
+		if (memBir == null) {
+			if (other.memBir != null)
+				return false;
+		} else if (!memBir.equals(other.memBir))
+			return false;
+		if (memCd != other.memCd)
+			return false;
+		if (memGender != other.memGender)
+			return false;
+		if (memHp == null) {
+			if (other.memHp != null)
+				return false;
+		} else if (!memHp.equals(other.memHp))
+			return false;
+		if (memId == null) {
+			if (other.memId != null)
+				return false;
+		} else if (!memId.equals(other.memId))
+			return false;
+		if (memMail == null) {
+			if (other.memMail != null)
+				return false;
+		} else if (!memMail.equals(other.memMail))
+			return false;
+		if (memMile != other.memMile)
+			return false;
+		if (memNm == null) {
+			if (other.memNm != null)
+				return false;
+		} else if (!memNm.equals(other.memNm))
+			return false;
+		if (memPass == null) {
+			if (other.memPass != null)
+				return false;
+		} else if (!memPass.equals(other.memPass))
+			return false;
+		return true;
+	}
+	
+	
+	
 }

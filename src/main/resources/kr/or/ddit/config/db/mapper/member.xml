@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="member">
+	
+<!--private String memId;		// 회원아이디
+	private int memCd;			// 회원상태코드 0:휴면 1:정상
+	private String memPass;		// 회원 비밀번호
+	private String memNm;		// 회원이름
+	private int memGender;		// 회원성별 1:남자 2:여자
+	private String memBir;		// 회원 생년월일
+	private int addrSq;			// 주소시퀀스번호 : 기본주소
+	private String addrDetail;	// 상세주소
+	private String memHp;		// 회원 휴대폰번호
+	private String memMail;		// 회원 메일주소
+	private int eMoney;			// 회원 eMoney
+	private int memMile;		// 회원마일리지 -->
+	
+	<!-- id가 일치하는 회원의 정보를 가져옴  -->
+<select id="selectMemberVO" parameterType="String" resultType="MemberVO">
+ 	select * from member where mem_id = #data# and mem_cd=1
+</select>
+ 
+<!-- id가 일치하는 회원의 기본주소를 주소테이블에서 가져옴  -->
+<!-- <select id="selectAddrVO" parameterType="String" resultType="MemberVO">
+	select A.* from addr A, (select addr_sq from member where mem_id = #data#) B
+	where B.addr_sq = A.addr_sq
+</select> -->
+
+
+<!-- id가 일치하는 회원의 관심장르를 가져옴  -->
+<!-- <select id="selectIntrGenreList" parameterType="String" resultType="BookGenreVO">
+	select A.* from book_genre A,
+	(select bkgre_cd from intr_genre where mem_id = #data#)B
+	where B.bkgre_cd = A.bkgre_cd
+</select> -->
+
+<!-- 새로 작성한 회원의 정보로 수정  -->
+<!-- <update id="updateMemberVO" parameterType="MemberVO">
+	update MEMBER
+	set MEM_PASS = #memPass#,
+	    MEM_NM = #memNm#,
+	    ADDR_SQ = #addrSq#,
+	    ADDR_DETAIL = #addrDetail#,
+	    MEM_HP = #memHp#,
+	    MEM_MAIL = #memMail#
+	where MEM_ID = #memId#
+</update> -->
+
+<!-- 검색 키워드로 해당 주소 목록을 가져옴  -->
+<!-- <select id="selectAddrList" parameterType="String" resultType="AddrVO">
+	select B.* 
+	  from addr B, (select addr_sq, (addr_zip ||' '||addr_sido||' '||Addr_Gugun||' '||addr_dong) as add1 from addr ) A
+     where A.add1 like '%'||#data#||'%'
+       and B.addr_sq = A.addr_sq
+</select>
+ -->
+<!-- 회원 탈퇴 메서드(회원 활동 구분코드를 0으로 변경) -->
+<!-- <update id="deleteMemberVO" parameterType="String">
+	update member
+	set mem_cd = 0
+	where mem_id=#data#
+</update> -->
+
+<!-- 회원의 이머니 정보를 수정(충전/환불)하는 메서드  -->
+<!-- <update id="updateEmoney" parameterType="MemberVO">
+	update member
+	set e_money = #eMoney#
+	where mem_id = #memId#
+</update> -->
+
+<!-- 회원등록 -->
+<!-- <insert id="insertMemberInfo" parameterType="MemberVO">
+	INSERT INTO MEMBER
+	 VALUES(#memId#,
+		#memCd#,
+		#memPass#,
+		#memNm#,
+		#memGender#,
+		#memBir#,
+		#addrSq#,
+		#addrDetail#,
+		#memHp#,
+		#memMail#,
+		#eMoney#,
+		#memMile#
+	)
+</insert> -->
+	
+<!-- 회원 관심장르등록 -->
+<!-- <insert id="insertIntrGre" parameterType="intrGreVO">
+	 INSERT INTO INTR_GENRE(IN_GRE_SQ ,MEM_ID,BKGRE_CD)  SELECT NVL(MAX(IN_GRE_SQ),0)+1,#memId#,#bkGreCd# FROM INTR_GENRE WHERE MEM_ID = #memId#  
+</insert> -->
+
+<!-- ID 중복체크 -->
+<!-- <select id="checkMemberId" resultType="MemberVO">
+	SELECT * FROM MEMBER WHERE MEM_ID = #memId#
+</select> -->
+
+<!-- 기본주소 검색 -->
+<!-- <select id="selectAddr" parameterType="String"  resultMap="AddrVO">
+	SELECT B.* FROM ADDR B, (SELECT ADDR_SQ FROM ADDR WHERE (ADDR_SIDO ||' '|| ADDR_GUGUN ||' ' || ADDR_DONG) LIKE '%'||#data#||'%')A 
+	WHERE B.ADDR_SQ = A.ADDR_SQ
+</select> -->
+   	
+</mapper> 
+ 

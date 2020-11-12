@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+	
+	<!-- 
+		context 중 가장 난해한 Application 이다 
+		
+		아마도.. 잡다한 기능들을 모아놓은 곳이 아닐까....... 		
+		
+														
+			Root Context이자 스프링에 의해 생성되는 Bean에 대한 Spring IoC Container입니다. -> 스프링 제어 역전 컨테이너 ( 생각 하기엔.. 주로 상속을 받거나, bean을 생성해 상위 context들로 부터 기능을 구현 해야 하는 container 같다)
+			BeanFactory를 상속받는 Context
+			여러 Servlet에서 공통으로 사용할 Bean을 등록하는 Context입니다.
+			@Transactional 으로 트랜잭션을 이용해야할 때 ApplicationContext에 있는 Service에서만 트랜잭션이 정상 작동합니다.
+			출처: https://jeong-pro.tistory.com/222 [기본기를 쌓는 정아마추어 코딩블로그]
+			
+		라고 한다...
+		
+			
+	 -->
+	
+	
+	
+<!-- kr.or.ddit 패키지 하위의 클래스중 @Service, @Controller 어노테이션이 붙은 클래스를 스캔하여 스프링 빈으로 생성 true 로 하면 자동으로 스캔-->
+	<context:component-scan base-package="kr.or.ddit" use-default-filters="false">	
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+		<context:include-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice"/> <!-- ControllerAdvice 공통예외처리 -->
+	</context:component-scan>
+	
+	<bean id="profileImgView" class="kr.or.ddit.mvc.view.ProfileImgView"/>		<!-- ProfileImgView 객체 등록 / profile_controller가 사용자 정보가져 와서 url을 요청하면 
+																						profileImgView를 불러온다 -->
+	<bean id="DownloadView" class="kr.or.ddit.mvc.view.DownloadView"/>	
+																							
+	<bean id="excelView" class="kr.or.ddit.mvc.view.ExcelDownloadView"/>		<!-- excel view 설정  -->						
+																						
+	<bean id="jsonView" class="org.springframework.web.servlet.view.json.MappingJackson2JsonView"/>	<!-- Resolver 등록 -->
+	
+	<bean class="org.springframework.web.servlet.view.BeanNameViewResolver">
+		<property name="order" value="1"/>
+	</bean>
+
+	
+	<!-- tiles view resolver 추가
+		1. tiles 설정 작업==> TilesConfigurer 를 통해 설정
+		2. tiles view resolver 등록 
+	-->
+	<bean id="tilesConfigurer" class="org.springframework.web.servlet.view.tiles3.TilesConfigurer">
+		<property name="definitions">
+			<list>
+				<value>classpath:kr/or/ddit/config/tiles/tiles-definition.xml</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean class="org.springframework.web.servlet.view.tiles3.TilesViewResolver">
+		<property name="order" value="0"></property>
+		<property name="viewClass" value="org.springframework.web.servlet.view.tiles3.TilesView"/>
+	</bean>
+		
+	
+	
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">	<!-- view resolver -->
+		<!-- prefix : 접두어, suffix : 접미어 
+			 Control0ler가 리턴하는 문자열에 prefix, suffix를 적용하여 해당 경로의 파일로 응답을 생성
+			 LoginController.getView() ==> "login/view"
+			
+				prefix				viewName	  suffix
+			 "/WEB-INF/views/" + "login/view" + ".jsp"
+			 
+			 = "/WEB-INF/views/login/view.jsp"
+		-->
+		<property name="order" value="2"/>								<!-- view resolver 등록할때 같이 등록 -->
+		
+		<!-- url 주소를 설정 해주는  resolver  -->
+		<property name="prefix" value="/WEB-INF/views/"/>
+											<!--  ex)  localhost/WEB-INF/views   +   /member/member  +  .jsp -->		
+		<property name="suffix" value=".jsp"/>
+		
+	</bean>
+ 
+	
+	<!-- @Controller, @RequestMapping,
+		HanlderMapping, HandlerAdapater,
+		formatting conversion service 등, validation
+		spring mvc 패턴에 필요한 어노테이션, 엘레먼트(요소,부류) 처리 
+		-->
+	<mvc:annotation-driven/>
+	
+	
+	<!-- spring container가 처리하지 못하는 요청에 대해
+	server 에 등록된 default servlet에 위임
+	servlet-name 과 관련 -->
+	<mvc:default-servlet-handler/>
+	
+	
+	<!-- 파일 업로드 처리를 위한 multipartResolver 설정 -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+	</bean>
+	
+	
+	<!-- 정적자원 매핑 처리
+		 1. url 단축을 목적
+		 2. WEB-INF : 외부에서 접근불가능한 공간에 저장된 자원들 접근 매핑 -->
+		 <!-- localhost/resoureces/style.css -->
+	<mvc:resources mapping="/resources/**" location="/WEB-INF/views/error/"/>
+	
+	 
+	<!-- localeResolver -->
+	<bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver"></bean> 
+	 
+	 <!-- locale 변경 감지 interceptor -->
+	 <mvc:interceptors>
+	 	<mvc:interceptor>
+	 		<mvc:mapping path="/**"/>
+	 		<bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+	 			<property name="paramName" value="lang"></property>
+	 		</bean>
+	 	</mvc:interceptor>
+	 </mvc:interceptors>
+	 
+</beans>

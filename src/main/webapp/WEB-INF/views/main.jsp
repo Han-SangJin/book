@@ -27,7 +27,7 @@
       background-color: #f1f1f1;
       height: 100%;
     }
-    
+      
     /* Set black background color, white text and some padding */
     footer {
       background-color: #555;
@@ -44,19 +44,19 @@
       .row.content {height:auto;} 
     }
     
-    
+      
    
   </style>
 </head>
 <body>
 <%-- <%=member %> --%>
-<%-- <%if(member == null){ %>
-	 <jsp:include page="/Pages/main_nav.jsp"></jsp:include>
+<%if(member == null){ %>
+	<jsp:include page="/WEB-INF/views/mainpage/main_nav.jsp"></jsp:include>
 <%}else{ %>
-	<jsp:include page="/Pages/main_nav_login.jsp"></jsp:include>
+	<jsp:include page="/WEB-INF/views/mainpage/main_nav_login.jsp"></jsp:include>
 <%} %>
-	<jsp:include page="/Pages/main_content.jsp"></jsp:include>
-	<jsp:include page="/Pages/main_footer.jsp"></jsp:include>
- --%>
+	<jsp:include page="/WEB-INF/views/mainpage/main_content.jsp"></jsp:include>
+	<jsp:include page="/WEB-INF/views/mainpage/main_footer.jsp"></jsp:include>
+
 </body>
-</jsp>
+</jsp>                        mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmjJJJjjjjjjjjjjjjj
