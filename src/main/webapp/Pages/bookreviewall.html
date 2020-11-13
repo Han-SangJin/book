@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <script src="../js/bookreview.js"></script>
+  <script src="../js/reviewreply.js"></script>
+<script>
+ 
+rvreply = { };
+write = { }; // name, content, subject,
+ 
+ //내부 스크립트
+ $(function(){
+	        
+	    
+	 readpageServer(1);
+	 	 
+	 $('#modifyForm').hide();
+		// 페이지 번호 클릭하면 이벤트 설정
+	 	$('#btngroup1').on('click', '.paging', function(){
+	 		$('body').append($('#modifyForm'));
+ 			$('#modifyForm').hide();
+	 		currentpage = $(this).text().trim();
+	 		readpageServer(currentpage);
+	 	}) 
+	 	      
+	 	// 이전버튼 클릭하면
+	 	$('#btngroup1').on('click', '.previous a', function(){
+	 		$('body').append($('#modifyForm'));
+ 			$('#modifyForm').hide();
+	 		currentpage = parseInt($('.paging:first').text().trim()) -1;
+	 		readpageServer(currentpage);
+	 	}) 
+	 	     
+	 	// 다음버튼 클릭하면
+	 	$('#btngroup1').on('click', '.next a', function(){
+	 		$('body').append($('#modifyForm'));
+ 			$('#modifyForm').hide();
+	 		currentpage = parseInt($('.paging:last').text().trim()) +1;
+	 		readpageServer(currentpage);
+	 	})
+	 	   
+	 	    
+	
+	 	// 버튼에 대한 이벤트
+	 	$('.result1').on('click', '.action', function(){
+	 		actionname = $(this).attr('name');
+	 		idx = $(this).attr('idx');
+	 		
+	 		if(actionname == "modify"){
+	 			//alert(idx + "번 글 수정");
+	 			viewServer();
+ 	 			//$('#uModal').modal('show');
+	 			//readpageServer(1);
+	 		}else if(actionname == "delete"){
+	 			alert(idx + "번 글 삭제"); 
+	 			deleteServer(idx, this); 
+	 			readpageServer(1);
+	 		}else if(actionname == "reply"){
+	 			 //alert(idx + "번 글에 댓글을 답니다.");
+	 			// reply 테이블 - renum, bonum, name, cont, redate
+	 			// reply객체에 정보를 담는다.
+	 			rvreply.rvNo = idx;
+	 			rvreply.memId = 'a001';
+	 			rvreply.rvReCont = $(this).parent().find('textarea').val();
+	 			//console.log(rvreply.memId);
+	 			//console.log(rvreply.rvReCont); 
+	 			  
+	 			       
+	 			rvreplySaveServer(this);	// reply객체를 비동기를 이용해서 서버로 보낸다.
+	 			$(this).parent().find('textarea').val("");
+	 			
+	 			 
+	 			rvreplyListServer(this);
+	 			
+	 		}else if(actionname == "list"){
+	 			rvreply.rvNo = idx;
+	 			rvreplyListServer(this);
+	 			      
+	 		}else if(actionname == "r_modify"){
+	 			redx = $(this).attr('idx');
+	 			//alert(redx);
+	 			//댓글 수정을 클릭 했을경우 이미 다른 댓글에 폼이 열려 있는경우
+	 			if($('#modifyForm').css('display') != 'none'){
+	 				// 이미 열려 있는 폼에서 원래 내용을 가져 와서 다시 원래 span태그에 원래 모양으로 변환시키고 댓글 수정폼을 body로 다시 append시킨다.
+	 				// 위 내용을 댓글 수정에서 취소버튼 클릭 할 때 도 똑같은 작업을 수행한다.
+	 				rvreplyReset();
+	 			}  
+	 			    
+	 			
+	 			  
+	 			// 댓글내용 가져오기
+	 			modifyCont = $(this).parents('.rep').find('.cont').html().replace(/<br>/g, "\n");
+	 			// 댓글 수정 폼에 댓글 내용 출력
+	 			$('#modifyForm #text').val(modifyCont);
+				// 댓글 수정폼을 댓글내용 자리에 추가	 			
+	 			$(this).parents('.rep').find('.cont').empty().append($('#modifyForm'))
+				// 댓글 수정폼 보이기 
+	 			$('#modifyForm').show();
+	 			   
+	 		}else if(actionname == "r_delete"){
+	 			rvreplyDeleteServer(idx,this); 
+	 			//$(this).parents('.rep').remove();
+	 		}else if(actionname == "reset"){
+	 			//댓글 수정 폼에서 취소버튼 클릭
+	 			rvreplyReset();
+	 		}else if(actionname == "reok"){
+	 			//댓글 수정 폼에서 확인버튼 클릭
+				// alert(redx + "번 댓글번호를 수정합니다.")
+	 			    
+	 			// textarea 에서  새로 수정된 내용을 가져오기;
+	 			modifyCont = $('#modifyForm #text').val();
+	 			spanTag = $('#modifyForm').parent();
+	 			 
+	 			// Db에 적용시킬 수정 내용 - reply 객체에 추가 ( cont, renum )
+	 			rvreply.rvReCont = modifyCont; 
+	 			rvreply.rvReNo = redx;
+	 			rvreplyUpdateServer();
+	 			
+	 			    
+	 			$('body').append($('#modifyForm'));
+	 			$('#modifyForm').hide();
+	 			
+	 			spanTag.html(modifyCont.replace(/\n/g, "<br>"))
+	 		}      
+	 		                	    
+	 		               
+	 		      
+	 	})    
+	 	 
+	 	 
+	 	
+	 	  rvreplyReset = function(){
+		 	 
+		 	 // 수정폼의 부모
+		 	 spanTag = $('#modifyForm').parent();
+		 	 
+		 	 // 수정폼을 잘라내기 해서 body로 이동
+		 	 $('body').append($('#modifyForm'));
+		 	 $('#modifyForm').hide();
+		 	  
+		 	 // 원래 내용을 span 태그에 다시 출력 
+		 	 spanTag.html(modifyCont.replace(/\n/g, "<br>"));
+		 	 	
+		  }  
+	               
+	 	  
+	 	 // 수정 모달창에서 데이타 수정후 전송버튼 클릭
+		 $('#usend').on('click', function(){
+			 
+			 updateboardServer();
+				// 모달창 닫기 
+				$('#uModal').modal('hide');
+				// 모달창의 입력데이타 지우기 
+				$('.indata').val("");
+				//readpageServer(1);
+		 })
+		 
+	    
+		  
+		 // 글쓰기 모달창 에서 데이터 입력후에 전송버튼 클릭
+		 $('#send').on('click', function(){
+		
+			
+			writeServer();
+	
+			// 모달창 닫기 
+			$('#wModal').modal('hide');
+			// 모달창의 입력데이타 지우기 
+			$('.indata').val("");
+
+			//readpageServer(1);
+		 })
+	  
+ })
+</script>
+</head>
+<body>
+
+ <div id="modifyForm">
+ 	<textarea id="text" rows="5" cols="50"></textarea>
+ 	<input type="button" value="확인" class="action" name="reok" id="btnOK">
+ 	<input type="button" value="취소" class="action" name="reset" id="btnReset">
+ </div>
+ 
+ <br><br>
+ 
+ <input data-toggle="modal" data-target="#wModal" id="write" type="button" value="서평작성"><br>
+<div class="result1"></div>
+
+<div id="btngroup1"></div>
+   
+ <!-- 글쓰기 Modal -->
+<div id="wModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+  
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">글쓰기</h4>
+      </div>
+      <div class="modal-body">  
+ 	
+	      <form name="wform" id="wform">
+	      	
+	     	아이디<input class="indata" type="text" id="memId" name="memId"><br> 
+	           주문번호<input class="indata" type="text" id="ordNo" name="ordNo"><br>
+	             카트번호<input class="indata" type="text" id="cartNo" name="cartNo"><br>
+	             제목<input class="indata" type="text" id="rvTitle" name="rvTitle"><br>
+	     	내용<br>
+	     	<textarea class="indata" id="rvCont" name="rvCont" rows="20" cols="50" name="writer"></textarea><br>
+	             <input id="send" type="button" value="전송"> 
+	             평점<input class="indata" type="text" id="rvGr" name="rvGr"><br>
+	               
+	      </form>
+     	      
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>	
+
+  </div>
+</div> 
+  
+   
+      
+       
+     
+  <!--글 수정 form  Modal -->
+<div id="uModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+ 
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">글수정</h4>
+      </div> 
+      <div class="modal-body"> 
+	      <form name="uform" id="uform">
+	      	글번호<input class="indata" type="text" id="urvNo" name="rvNo"><br>
+	     	제목<input class="indata" type="text" id="urvTitle" name="rvTitle"><br> 
+	     	내용<br>
+	     	<textarea class="indata" id="urvCont" name="rvCont" rows="20" cols="50"></textarea><br>
+	             <input id="usend" type="button" value="전송"> 
+	     	평점<input class="indata" type="text" id="urvGr" name="rvGr"><br> 
+	               
+	      </form>           
+     	          
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div> 
+
+ 
+ 
+
+
+	
+
+</body>
+</html>

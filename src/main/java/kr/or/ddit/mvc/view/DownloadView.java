@@ -11,8 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.view.AbstractView;
 
-import kr.or.ddit.member.model.MemberVO;
-
 
 public class DownloadView extends AbstractView {
 	

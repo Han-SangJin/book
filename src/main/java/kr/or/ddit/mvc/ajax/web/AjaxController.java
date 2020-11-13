@@ -7,7 +7,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import kr.or.ddit.member.model.MemberVO;
+import rb.cmm.vo.MemberVO;
+
 
 @Controller
 public class AjaxController {

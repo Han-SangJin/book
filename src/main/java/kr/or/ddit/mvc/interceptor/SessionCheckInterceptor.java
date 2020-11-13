@@ -6,7 +6,8 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import kr.or.ddit.member.model.MemberVO;
+import rb.cmm.vo.MemberVO;
+
 
 public class SessionCheckInterceptor extends HandlerInterceptorAdapter{
 	

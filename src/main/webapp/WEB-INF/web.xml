@@ -24,7 +24,7 @@
 		<param-value>classpath:kr/or/ddit/config/spring/root-context.xml
 						 classpath:kr/or/ddit/config/spring/aop-context.xml
 						 classpath:kr/or/ddit/config/spring/datasource-context.xml
-						 classpath:kr/or/ddit/config/spring/transaction-context.xml  </param-value>
+						<!--  classpath:kr/or/ddit/config/spring/transaction-context.xml -->  </param-value>
 						<!-- context 들의 위치를 지정해 Listener 가 반응 할수 있게 해준다 -->
 	</context-param>
 	
@@ -49,7 +49,7 @@
 		<init-param>	<!-- 서블릿 context 파일들 위치 설정 -->
 			<param-name>contextConfigLocation</param-name>	<!-- context 지정하는 태그  -->
 			<param-value>classpath:kr/or/ddit/config/spring/application-context.xml
-						 classpath:kr/or/ddit/config/spring/interceptor-context.xml
+						 <!-- classpath:kr/or/ddit/config/spring/interceptor-context.xml -->
 			</param-value>
 		</init-param>	<!-- 초기화 태그 -->
 		<load-on-startup>1</load-on-startup>

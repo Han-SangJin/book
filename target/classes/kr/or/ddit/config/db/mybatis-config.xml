@@ -5,7 +5,8 @@
 <configuration>
 	
 	<typeAliases>
-		<typeAlias type="kr.or.ddit.member.model.MemberVO" alias="MemberVO"/>
+		<typeAlias type="rb.cmm.vo.MemberVO" alias="MemberVO"/>
+		<typeAlias type="rb.cmm.vo.ManagerVO" alias="ManagerVO"/>
 	</typeAliases>
 
 	
@@ -25,6 +26,7 @@
 	   
   <mappers>
     <mapper resource="kr/or/ddit/config/db/mapper/member.xml"/>
+    <mapper resource="kr/or/ddit/config/db/mapper/manager.xml"/>
   </mappers>
   
 </configuration>
