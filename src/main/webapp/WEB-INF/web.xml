@@ -14,7 +14,7 @@
 	</welcome-file-list>
 			<!-- WAS에게 Servlet에 대한 정보를 줘야하는데 이때 쓰이는 파일이 web.xml 이다 
 				 톰캣과 spring을 이어주는 servlet container  -->
-
+		
 
 	<!-- Root Web Application Context 영역 -->
  	<!--  스프링 부모 컨테이너 생성 : service, repository  -->
@@ -24,7 +24,7 @@
 		<param-value>classpath:kr/or/ddit/config/spring/root-context.xml
 						 classpath:kr/or/ddit/config/spring/aop-context.xml
 						 classpath:kr/or/ddit/config/spring/datasource-context.xml
-						<!--  classpath:kr/or/ddit/config/spring/transaction-context.xml -->  </param-value>
+					     classpath:kr/or/ddit/config/spring/transaction-context.xml   </param-value>
 						<!-- context 들의 위치를 지정해 Listener 가 반응 할수 있게 해준다 -->
 	</context-param>
 	
@@ -58,6 +58,10 @@
 	
 	<!-- 서블릿 매핑   mvc:default 과 관련 
 		/ 로 들어오는 모든 요청은 dispatcherservlet 에서 처리함
+		
+		/ 은 모든 페이지를 불러오고 jsp파일을 직접 호출가능하다.	*.do 도 매핑한 페이지를 가져온다.
+		/* 은 /한개만 처리 가능, ex) /member  ,  /board	=> jsp에대한 매핑이 안된다   *.jsp 도 마찬가지
+		/**은 // 2개 처리 가능  ex) /view/member, /board/main
 	-->
 	<servlet-mapping>
 		<servlet-name>dispatcherServlet</servlet-name>
@@ -86,9 +90,14 @@
 		<filter-name>encodingFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping> 
-	
+	 
 	
 	<!-- 에러페이지 경로 설정 -->
+	<error-page>
+		<error-code>405</error-code>
+		<location>/WEB-INF/views/error/405/405.html</location>
+	</error-page>
+	
 	<error-page>
 		<error-code>404</error-code>
 		<location>/WEB-INF/views/error/404/404.html</location>

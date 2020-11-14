@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+	version="3.0">
+	<display-name>spring</display-name>
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+		<welcome-file>index.htm</welcome-file>
+		<welcome-file>index.jsp</welcome-file>
+		<welcome-file>default.html</welcome-file>
+		<welcome-file>default.htm</welcome-file>
+		<welcome-file>default.jsp</welcome-file>
+	</welcome-file-list>
+			<!-- WAS에게 Servlet에 대한 정보를 줘야하는데 이때 쓰이는 파일이 web.xml 이다 
+				 톰캣과 spring을 이어주는 servlet container  -->
+		
+
+	<!-- Root Web Application Context 영역 -->
+ 	<!--  스프링 부모 컨테이너 생성 : service, repository  -->
+	<context-param>
+		<!-- 스프링 제공 contextConfigLocation -->
+		<param-name>contextConfigLocation</param-name>  	
+		<param-value>classpath:kr/or/ddit/config/spring/root-context.xml
+						 classpath:kr/or/ddit/config/spring/aop-context.xml
+						 classpath:kr/or/ddit/config/spring/datasource-context.xml
+						<!--  classpath:kr/or/ddit/config/spring/transaction-context.xml -->  </param-value>
+						<!-- context 들의 위치를 지정해 Listener 가 반응 할수 있게 해준다 -->
+	</context-param>
+	
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+						<!-- ContextLoaderListener로 context의 동작에 반응한다  -서블릿과 필터에 공유-->
+	</listener>
+	
+	
+	
+	<!-- Web Application Context 영역 공유불가 -->
+			<!-- 부모는 자식의 기능을 사용할수 없으니까 서블릿이 자식인 걸까???? -->
+	<!-- servlet context 안에 선언된 context는 다른 context 들과 공유되지 않는다. -->
+	<!-- 자식 컨테이너 설정 - dispatcherServlet을 통해 생성 : controller
+	서블릿 설정     스프링 제공 dispatcherServlet -->
+	<servlet>
+		<!-- 스프링 제공 dispatcherServlet -->
+		<servlet-name>dispatcherServlet</servlet-name> <!-- dispatcher뜻 항공기 운항 관리자(관제사), 배차 담당자 -->
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+					<!-- 톰캣(servlet container) 를 통해 들어오는 요청을 관리하는 컨트롤러 -->
+		
+		<init-param>	<!-- 서블릿 context 파일들 위치 설정 -->
+			<param-name>contextConfigLocation</param-name>	<!-- context 지정하는 태그  -->
+			<param-value>classpath:kr/or/ddit/config/spring/application-context.xml
+						 <!-- classpath:kr/or/ddit/config/spring/interceptor-context.xml -->
+			</param-value>
+		</init-param>	<!-- 초기화 태그 -->
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	
+	
+	<!-- 서블릿 매핑   mvc:default 과 관련 
+		/ 로 들어오는 모든 요청은 dispatcherservlet 에서 처리함
+		
+		/ 은 모든 페이지를 불러오고 jsp파일을 직접 호출가능하다.	*.do 도 매핑한 페이지를 가져온다.
+		/* 은 /한개만 처리 가능, ex) /member  ,  /board	=> jsp에대한 매핑이 안된다   *.jsp 도 마찬가지
+		/**은 // 2개 처리 가능  ex) /view/member, /board/main
+	-->
+	<servlet-mapping>
+		<servlet-name>dispatcherServlet</servlet-name>
+		<url-pattern>/</url-pattern>
+	</servlet-mapping> 
+	
+	<!-- servlet-context = Controller
+		 root-context = service, repository 에 주로 쓰임 -->
+	
+	
+	
+	
+	
+	
+	
+	<!-- 캐릭터 인코딩 설정-스프링 프레임워크 -->
+	<filter>
+		<filter-name>encodingFilter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>utf-8</param-value>
+		</init-param>
+	</filter>	 
+	<filter-mapping>
+		<filter-name>encodingFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping> 
+	 
+	
+	<!-- 에러페이지 경로 설정 -->
+	<error-page>
+		<error-code>405</error-code>
+		<location>/WEB-INF/views/error/405/405.html</location>
+	</error-page>
+	
+	<error-page>
+		<error-code>404</error-code>
+		<location>/WEB-INF/views/error/404/404.html</location>
+	</error-page>
+	 
+	 <error-page>
+		<error-code>500</error-code>
+		<location>/WEB-INF/views/error/500/500.html</location>
+	</error-page>
+	 
+</web-app>

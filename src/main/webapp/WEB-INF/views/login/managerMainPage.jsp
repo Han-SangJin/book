@@ -53,12 +53,12 @@
 </head>
 <body>
 <%if(mvo==null){%> <!-- 로그인을 실패했을때 -->
-	<jsp:include page="/Pages/managerPage_nav.jsp"></jsp:include>
-	<jsp:include page="/Pages/managerPage_content.jsp"></jsp:include>
+	<jsp:include page="../Pages/managerPage_nav.jsp"></jsp:include>
+	<jsp:include page="../Pages/managerPage_content.jsp"></jsp:include>
 <%-- 	<jsp:include page="/Pages/managerPage_footer.jsp"></jsp:include> --%>
 <%}else{%> <!-- 로그인에 성공했을때 -->
-	<jsp:include page="/manager/managerPage_nav.jsp"></jsp:include>
-	<jsp:include page="/manager/managerPage_content.jsp"></jsp:include>
+	<jsp:include page="../manager/managerPage_nav.jsp"></jsp:include>
+	<jsp:include page="../manager/managerPage_content.jsp"></jsp:include>
 <%-- 	<jsp:include page="/manager/managerPage_footer.jsp"></jsp:include> --%>
 <%}%>
 </body>

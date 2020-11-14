@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="book">
+	
+	<!-- 책정보 전부 불러오기 -->
+<!-- 	<select id="bookList" resultMap="bookvo">
+		select * from book
+	</select>  -->
+	  
+	<!-- insert -->
+<!-- 	<insert id="bookInsert" parameterType="BookVO">	
+		insert into BOOK values(#{bkIsbn}, #{prodCd}, #{bkGreCd}, #{bkSt}, #{bkNm}, #{bkAtr}, #{bkAtr}, #{bkPbl}, #{bkPage}, #{bkArti}, #{bkGrade}, #{bkSelPrice}, #{bkFixPrice}, #{bkSalesQty}, #{fileId}, #{imgId}, sysdate)
+		
+	</insert>  
+	 -->
+	
+	<!-- update --> 
+<!-- 	<update id="bookUpdate" parameterType="BookVO">
+		 update BOOK set BK_ARTI = #bkArti# where BK_ISBN = #{bkIsbn}
+	</update> -->
+	 
+	
+	<!-- 수정 대상의 책을 가져오기 -->
+	<select id="bookSelect" parameterType="String" resultType="BookVO">
+		select * from BOOK where BK_ISBN = #{bkIsbn}
+	</select> 
+	  
+	 
+
+	<!-- delete -->
+<!-- 	<delete id="bookDelete" parameterType="int">
+		delete from BOOK where BK_ISBN = #{bkIsbn}
+	</delete> -->
+	
+	
+	<!-- 책 페이지 -->
+	<select id="selectPage" parameterType="hashMap" resultType="BookVO">
+		select A.* from 
+			(select rownum as rnum, B.*  from (
+			     select * from book order by BK_ISBN desc) B
+			     <![CDATA[
+			where rownum <=#{end}) A
+			where rnum >=#{start}
+			]]>
+	</select>
+	
+	<select id="getTotalCount" resultType="int">
+		select count(*) from book
+	</select>
+	 
+	
+</mapper>			

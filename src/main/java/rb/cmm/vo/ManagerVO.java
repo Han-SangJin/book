@@ -2,22 +2,63 @@ package rb.cmm.vo;
 
 public class ManagerVO {
 	
-	private String mngId;		// 관리자 아이디
-	private String mngPass;	// 관리자 비밀번호
+	private String mng_id;		// 관리자 아이디
+	private String mng_pass;
 	
 	
-	public String getMngId() {
-		return mngId;
+	public String getMng_id() {
+		return mng_id;
 	}
-	public void setMngId(String mngId) {
-		this.mngId = mngId;
+	public void setMng_id(String mng_id) {
+		this.mng_id = mng_id;
 	}
-	public String getMngPass() {
-		return mngPass;
+	public String getMng_pass() {
+		return mng_pass;
 	}
-	public void setMngPass(String mngPass) {
-		this.mngPass = mngPass;
+	public void setMng_pass(String mng_pass) {
+		this.mng_pass = mng_pass;
 	}
+	
+	
+	@Override
+	public String toString() {
+		return "ManagerVO [mng_id=" + mng_id + ", mng_pass=" + mng_pass + "]";
+	}
+	
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((mng_id == null) ? 0 : mng_id.hashCode());
+		result = prime * result + ((mng_pass == null) ? 0 : mng_pass.hashCode());
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ManagerVO other = (ManagerVO) obj;
+		if (mng_id == null) {
+			if (other.mng_id != null)
+				return false;
+		} else if (!mng_id.equals(other.mng_id))
+			return false;
+		if (mng_pass == null) {
+			if (other.mng_pass != null)
+				return false;
+		} else if (!mng_pass.equals(other.mng_pass))
+			return false;
+		return true;
+	}
+	
+	
+	
+	
 
 	
 	

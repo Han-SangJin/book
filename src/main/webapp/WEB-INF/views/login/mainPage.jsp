@@ -51,12 +51,12 @@
 <body>
 <%-- <%=member %> --%>
 <%if(member == null){ %>
-	 <jsp:include page="/Pages/main_nav.jsp"></jsp:include>
+	 <jsp:include page="../Pages/main_nav.jsp"></jsp:include>
 <%}else{ %>
-	<jsp:include page="/Pages/main_nav_login.jsp"></jsp:include>
+	<jsp:include page="../Pages/main_nav_login.jsp"></jsp:include>
 <%} %>
-	<jsp:include page="/Pages/main_content.jsp"></jsp:include>
-	<jsp:include page="/Pages/main_footer.jsp"></jsp:include>
+	<jsp:include page="../Pages/main_content.jsp"></jsp:include>
+	<jsp:include page="../Pages/main_footer.jsp"></jsp:include>
 
 </body>
 </jsp>

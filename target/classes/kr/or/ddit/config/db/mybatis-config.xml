@@ -7,6 +7,7 @@
 	<typeAliases>
 		<typeAlias type="rb.cmm.vo.MemberVO" alias="MemberVO"/>
 		<typeAlias type="rb.cmm.vo.ManagerVO" alias="ManagerVO"/>
+		<typeAlias type="rb.cmm.vo.BookVO" alias="BookVO"/>
 	</typeAliases>
 
 	
@@ -22,11 +23,11 @@
       </dataSource>
     </environment>
   </environments> 
-  	
 	   
   <mappers>
     <mapper resource="kr/or/ddit/config/db/mapper/member.xml"/>
     <mapper resource="kr/or/ddit/config/db/mapper/manager.xml"/>
+    <mapper resource="kr/or/ddit/config/db/mapper/book.xml"/>
   </mappers>
   
 </configuration>
