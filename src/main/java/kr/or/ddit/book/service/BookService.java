@@ -34,6 +34,7 @@ public class BookService implements BookServiceI{
 	
 	@Override
 	public int BookInsert(BookVO vo) {
+		logger.debug("BookService - BookInsert : " ,vo);
 		return BookDao.BookInsert(vo);
 	}
 
@@ -45,19 +46,22 @@ public class BookService implements BookServiceI{
 
 
 	@Override
-	public String BookUpdate(BookVO vo) {
+	public int BookUpdate(BookVO vo) {
+		logger.debug("BookService - BookUpdate : " ,vo);
 		return BookDao.BookUpdate(vo);
 	}
 
 	
 	@Override
 	public BookVO BookSelect(String rvNo) {
+		logger.debug("BookService - BookSelect : " ,rvNo);
 		return BookDao.BookSelect(rvNo);
 	}
 	
 	
 	@Override
 	public int BookDelete(int renum) {
+		logger.debug("BookService - BookSelect : " ,renum);
 		return BookDao.BookDelete(renum);
 	}
 	

@@ -44,6 +44,7 @@ var listServer = function(cpage){
 		url: '/book/BookListPage',
 		data : { "page" : cpage },
 		type : 'get',
+		dataType : 'json',
 		success : function(res){
 		
 			$('.result1').empty();
@@ -150,6 +151,166 @@ var listServer = function(cpage){
 
 
 
+
+var saveServer = function(bkIsbn,prodCd,bkGreCd,bkSt,bkNm,bkAtr,bkPbl,bkPage,bkArti,bkGrade,bkSelPrice,bkFixPrice,bkSalesQty,fileId,imgId){
+
+	$.ajax({
+		url : '/book/BookSave',
+		dataType : 'json',
+		data : {
+			"bkIsbn":bkIsbn,
+			"prodCd":prodCd,
+			"bkGreCd":bkGreCd,
+			"bkSt": bkSt,
+			"bkNm":bkNm,
+			"bkAtr":bkAtr,
+			"bkPbl":bkPbl,
+			"bkPage":bkPage,
+			"bkArti":bkArti,
+			"bkGrade":bkGrade,
+			"bkSelPrice":bkSelPrice,
+			"bkFixPrice":bkFixPrice,
+			"bkSalesQty":bkSalesQty,
+			"fileId":fileId,
+			"imgId":imgId
+			 
+		},   
+		dataType : 'json',
+		type : 'post',
+		success : function(res){
+			listServer(1);
+		},
+		error : function(xhr){
+
+		}
+		
+	})		
+	
+}	
+
+
+
+
+
+
+
+
+var viewServer = function(){
+	
+	$.ajax({
+		url : "/book/BookSelect",
+		type : 'get',
+		data : { "bkIsbn" : idx },
+		dataType : 'json',
+		success : function(res){
+			$('#ubkIsbn').val(res.bkIsbn);
+			$('#uprodCd').val(res.prodCd);
+			$('#ubkGreCd').val(res.bkGreCd);
+			$('#ubkSt').val(res.bkSt);
+			$('#ubkNm').val(res.bkNm);
+			$('#ubkAtr').val(res.bkAtr);
+			$('#ubkPbl').val(res.bkPbl);
+			$('#ubkPage').val(res.bkPage);
+			
+			bkArti = res.bkArti.replace(/<br>/g, "\n")
+			$('#ubkArti').val(bkArti);
+			
+			$('#ubkGrade').val(res.bkGrade);
+			$('#ubkSelPrice').val(res.bkSelPrice);
+			$('#ubkFixPrice').val(res.bkFixPrice);
+			$('#ubkSalesQty').val(res.bkSalesQty);
+			$('#ufileId').val(res.fileId);
+			$('#uimgId').val(res.imgId);
+			$('#uModal').modal('show');
+			  
+		},
+		error : function(xhr){
+			alert("상태 : " + xhr.status);
+		}
+		
+	
+	})
+}
+
+
+
+
+
+
+
+
+
+
+
+var updateServer = function(bkIsbn,prodCd,bkGreCd,bkSt,bkNm,bkAtr,bkPbl,bkPage,bkArti,bkGrade,bkSelPrice,bkFixPrice,bkSalesQty,fileId,imgId){
+	
+	$.ajax({
+		
+		url : '/book/BookUpdate',
+		type : 'post',
+		data :  {
+			"bkIsbn":bkIsbn,
+			"prodCd":prodCd,
+			"bkGreCd":bkGreCd,
+			"bkSt": bkSt,
+			"bkNm":bkNm,
+			"bkAtr":bkAtr,
+			"bkPbl":bkPbl,
+			"bkPage":bkPage,
+			"bkArti":bkArti,
+			"bkGrade":bkGrade,
+			"bkSelPrice":bkSelPrice,
+			"bkFixPrice":bkFixPrice,
+			"bkSalesQty":bkSalesQty,
+			"fileId":fileId,
+			"imgId":imgId
+		},
+		dataType : 'json',
+		success : function(res){
+			listServer(1);
+		},
+		error : function(xhr){
+			alert("상태 : " + xhr.status);
+		}
+		
+	})
+
+}
+
+
+
+
+
+
+
+
+
+
+
+var deleteServer = function(idx, button){
+	$.ajax({
+		url : '/book/BookDelete',
+		data : {"bkIsbn" : idx },
+		type : 'post',
+		dataType : 'json',
+		success : function(res){
+			$(button).parents('.rep').remove();
+		},
+		error : function(xhr){
+			alert("상태 : " + xhr.status);
+		}
+	})
+	
+}
+
+
+
+
+
+
+
+
+
 $(function(){
 	
 	listServer(1);
@@ -219,6 +380,7 @@ $(function(){
 		 			
 		 		}else if(actionname == "delete"){
 		 			deleteServer(idx, this);
+		 			listServer(1);
 		 		}
 		 		 
 		 		 
@@ -227,6 +389,7 @@ $(function(){
 		 		
 		 		else if(actionname == "bookdelete"){
 					imgdeleteServer(idx, this);
+					listServer(1);
 		 		}
 		 		
 	 		})	    
@@ -234,7 +397,24 @@ $(function(){
 	 		
 	 	// 수정 모달창에서 데이타 수정후 전송버튼 클릭
 	 	$('#usend').on('click', function(){
-	 		updateServer();
+
+			 bkIsbn = $('#ubkIsbn').val();
+			 prodCd = $('#uprodCd').val();
+			 bkGreCd = $('#ubkGreCd').val();
+			 bkSt = $('#ubkSt').val();
+			 bkNm = $('#ubkNm').val();
+			 bkAtr = $('#ubkAtr').val();
+			 bkPbl = $('#ubkPbl').val();
+			 bkPage = $('#ubkPage').val();
+			 bkArti = $('#ubkArti').val();
+			 bkGrade = $('#ubkGrade').val();
+			 bkSelPrice = $('#ubkSelPrice').val();
+			 bkFixPrice = $('#ubkFixPrice').val();
+			 bkSalesQty = $('#ubkSalesQty').val();
+			 fileId = $('#ufileId').val();
+			 imgId = $('#uimgId').val();
+			 
+	 		updateServer(bkIsbn,prodCd,bkGreCd,bkSt,bkNm,bkAtr,bkPbl,bkPage,bkArti,bkGrade,bkSelPrice,bkFixPrice,bkSalesQty,fileId,imgId);
 	 		
 			// 모달창 닫기 
 			$('#uModal').modal('hide');
@@ -349,7 +529,8 @@ $(function(){
 	      <label> 정가</label><input class="indata" type="text" id="ubkFixPrice" name="bkFixPrice"><br>
 	      <label> 판매량</label><input class="indata" type="text" id="ubkSalesQty" name="bkSalesQty"><br>
 	      <label> 파일ID</label><input class="indata" type="text" id="ufileId" name="fileId"><br>
-	
+		  <input class="indata" type="text" id="uimgId" name="imgId" value="" style="display: none"><br>
+	 
 	      <input id="usend" type="button" value="수정완료"> 
 	      </form>
      	    

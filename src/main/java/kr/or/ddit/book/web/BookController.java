@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import kr.or.ddit.book.service.BookServiceI;
 import rb.cmm.vo.BookVO;
@@ -27,6 +28,8 @@ public class BookController {
 	
 	@Resource(name="bookService")
 	BookServiceI bookservice;
+	
+	
 	
 	
 	
@@ -81,5 +84,151 @@ public class BookController {
 		// jsp로
 		return "Pages/book_listpage";	// 이동할 url 리턴 
 	}
+
 	
+	
+	
+	
+	// RequestParam 으로 변수 명이 다를때 파라미터를 특정 변수에 할당 할 수 있다
+	@RequestMapping(path = "/BookSave", method = RequestMethod.POST)	
+	public String BookSave(Model model, @RequestParam(name="bkIsbn") String bk_isbn
+									  , @RequestParam(name="prodCd") String prod_cd
+									  , @RequestParam(name="bkGreCd") String bkgre_cd
+									  , @RequestParam(name="bkSt") String bk_st
+									  , @RequestParam(name="bkNm") String bk_nm
+									  , @RequestParam(name="bkAtr") String bk_atr
+									  , @RequestParam(name="bkPbl") String bk_pbl
+									  , @RequestParam(name="bkPage") String bk_page
+									  , @RequestParam(name="bkArti") String bk_arti
+									  , @RequestParam(name="bkGrade") String bk_grade
+									  , @RequestParam(name="bkSelPrice") String bk_sel_price
+									  , @RequestParam(name="bkFixPrice") String bk_fix_price
+									  , @RequestParam(name="bkSalesQty") String bk_sales_qty
+									  , @RequestParam(name="fileId") String file_id
+									  , @RequestParam(name="imgId") String img_id) {
+		
+		
+		//0. 클라이언트 전송시
+		BookVO bo = new BookVO();
+		
+		bo.setBk_isbn(bk_isbn);
+		bo.setProd_cd(prod_cd);
+		bo.setBkgre_cd(bkgre_cd);
+		bo.setBk_st(Integer.parseInt(bk_st));
+		bo.setBk_nm(bk_nm);
+		bo.setBk_atr(bk_atr); 
+		bo.setBk_pbl(bk_pbl);
+		bo.setBk_page(Integer.parseInt(bk_page));
+		bo.setBk_arti(bk_arti);
+		bo.setBk_grade(Integer.parseInt(bk_grade));
+		bo.setBk_sel_price(Integer.parseInt(bk_sel_price));
+		bo.setBk_fix_price(Integer.parseInt(bk_fix_price));
+		bo.setBk_sales_qty(Integer.parseInt(bk_sales_qty));
+		bo.setFile_id(Integer.parseInt(file_id));
+		bo.setImg_id(1);
+			
+		 
+		//2. service 메소드 호출
+		int cnt =  bookservice.BookInsert(bo);
+		logger.debug("BookController - BookSave : {}", cnt);
+		
+		//3. request에 저장
+		model.addAttribute("bkIsbn", cnt);
+		 
+		//4. jsp로 forward
+		return "/Pages/book";	
+	}
+	
+	
+	
+	
+	
+	
+	@RequestMapping(path = "/BookSelect", method = RequestMethod.GET)	
+	public String BookUpdate(Model model, @RequestParam(name="bkIsbn") String bk_isbn) {
+		
+		BookVO rv = bookservice.BookSelect(bk_isbn);
+		
+		model.addAttribute("bookvo", rv);
+		
+		return "/Pages/book_view";
+		
+	}  
+	
+	
+	
+	
+	
+	
+	
+	// RequestParam 으로 변수 명이 다를때 파라미터를 특정 변수에 할당 할 수 있다
+	@RequestMapping(path = "/BookUpdate", method = RequestMethod.POST)	
+	public String BookUpdate(Model model, @RequestParam(name="bkIsbn") String bk_isbn
+									  , @RequestParam(name="prodCd") String prod_cd
+									  , @RequestParam(name="bkGreCd") String bkgre_cd
+									  , @RequestParam(name="bkSt") String bk_st
+									  , @RequestParam(name="bkNm") String bk_nm
+									  , @RequestParam(name="bkAtr") String bk_atr
+									  , @RequestParam(name="bkPbl") String bk_pbl
+									  , @RequestParam(name="bkPage") String bk_page
+									  , @RequestParam(name="bkArti") String bk_arti
+									  , @RequestParam(name="bkGrade") String bk_grade
+									  , @RequestParam(name="bkSelPrice") String bk_sel_price
+									  , @RequestParam(name="bkFixPrice") String bk_fix_price
+									  , @RequestParam(name="bkSalesQty") String bk_sales_qty
+									  , @RequestParam(name="fileId") String file_id
+									  , @RequestParam(name="imgId") String img_id) {
+	
+		
+		// 클라이언트에서 전송하는 데이터
+		BookVO bo = new BookVO();
+		
+		bo.setBk_isbn(bk_isbn);
+		bo.setProd_cd(prod_cd);
+		bo.setBkgre_cd(bkgre_cd);
+		bo.setBk_st(Integer.parseInt(bk_st));
+		bo.setBk_nm(bk_nm);
+		bo.setBk_atr(bk_atr); 
+		bo.setBk_pbl(bk_pbl);
+		bo.setBk_page(Integer.parseInt(bk_page));
+		bo.setBk_arti(bk_arti);
+		bo.setBk_grade(Integer.parseInt(bk_grade));
+		bo.setBk_sel_price(Integer.parseInt(bk_sel_price));
+		bo.setBk_fix_price(Integer.parseInt(bk_fix_price));
+		bo.setBk_sales_qty(Integer.parseInt(bk_sales_qty));
+		bo.setFile_id(Integer.parseInt(file_id));
+		bo.setImg_id(Integer.parseInt(img_id));
+		
+		
+		//2.메소드 호출 
+		int cnt = bookservice.BookUpdate(bo);
+		
+		//3.request 저장
+		model.addAttribute("bkIsbn", cnt);
+		
+		//4. jsp로
+		return "/Pages/book_update";
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	@RequestMapping(path = "/BookDelete", method = RequestMethod.POST)	
+	public String BookDelete(Model model, @RequestParam(name="bkIsbn") String bk_isbn) {
+		
+		int isbn = Integer.parseInt(bk_isbn);
+		
+		//2. service 메소드 호출
+		int count =  bookservice.BookDelete(isbn);
+		
+		//3. request에 저장
+		model.addAttribute("bkIsbn", count);
+		 
+		return "/Pages/book_save";
+	}
 }	

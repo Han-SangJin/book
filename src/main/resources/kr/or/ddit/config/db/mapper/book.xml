@@ -10,29 +10,43 @@
 	</select>  -->
 	  
 	<!-- insert -->
-<!-- 	<insert id="bookInsert" parameterType="BookVO">	
-		insert into BOOK values(#{bkIsbn}, #{prodCd}, #{bkGreCd}, #{bkSt}, #{bkNm}, #{bkAtr}, #{bkAtr}, #{bkPbl}, #{bkPage}, #{bkArti}, #{bkGrade}, #{bkSelPrice}, #{bkFixPrice}, #{bkSalesQty}, #{fileId}, #{imgId}, sysdate)
+ 	<insert id="bookInsert" parameterType="BookVO">	
+		insert into BOOK values(#{bk_isbn}, #{prod_cd}, #{bkgre_cd}, #{bk_st}, #{bk_nm}, #{bk_atr}, #{bk_pbl}, #{bk_page}, #{bk_arti}, #{bk_grade}, #{bk_sel_price}, #{bk_fix_price}, #{bk_sales_qty}, #{file_id}, #{img_id}, sysdate)
 		
 	</insert>  
-	 -->
+
 	
 	<!-- update --> 
-<!-- 	<update id="bookUpdate" parameterType="BookVO">
-		 update BOOK set BK_ARTI = #bkArti# where BK_ISBN = #{bkIsbn}
-	</update> -->
+	<update id="bookUpdate" parameterType="BookVO">
+		 	  update BOOK SET prod_cd = #{prod_cd},  
+		 					  bkgre_cd = #{bkgre_cd},  
+		 					  bk_st = #{bk_st},  
+		 					  bk_nm = #{bk_nm}, 
+		 					  bk_atr = #{bk_atr}, 
+		 					  bk_pbl = #{bk_pbl}, 
+		 					  bk_page = #{bk_page}, 
+		 					  bk_arti = #{bk_arti}, 
+		 					  bk_grade = #{bk_grade}, 
+		 					  bk_sel_price = #{bk_sel_price}, 
+		 					  bk_fix_price = #{bk_fix_price}, 
+		 					  bk_sales_qty = #{bk_sales_qty}, 
+		 					  file_id = #{file_id}, 
+		 					  img_id = #{img_id}
+				 where BK_ISBN = #{bk_isbn}
+	</update> 
 	 
 	
 	<!-- 수정 대상의 책을 가져오기 -->
 	<select id="bookSelect" parameterType="String" resultType="BookVO">
-		select * from BOOK where BK_ISBN = #{bkIsbn}
+		select * from BOOK where BK_ISBN = #{bk_isbn}
 	</select> 
 	  
 	 
 
 	<!-- delete -->
-<!-- 	<delete id="bookDelete" parameterType="int">
-		delete from BOOK where BK_ISBN = #{bkIsbn}
-	</delete> -->
+ 	<delete id="bookDelete" parameterType="int">
+		delete from BOOK where BK_ISBN = #{bk_isbn}
+	</delete> 
 	
 	
 	<!-- 책 페이지 -->

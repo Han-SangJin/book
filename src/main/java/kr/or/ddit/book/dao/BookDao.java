@@ -26,7 +26,8 @@ public class BookDao implements BookDaoI {
 	
 	@Override
 	public int BookInsert(BookVO vo) {
-		return (Integer) sqlSession.selectOne("book.bookInsert", vo);
+		logger.debug("BookDao - BookInsert : {}", vo);
+		return (Integer) sqlSession.insert("book.bookInsert", vo);
 	}
 	
 
@@ -37,20 +38,23 @@ public class BookDao implements BookDaoI {
 	
 	 
 	@Override
-	public String BookUpdate(BookVO vo) {
-		return Integer.toString(sqlSession.selectOne("book.bookUpdate", vo));
+	public int BookUpdate(BookVO vo) {
+		logger.debug("BookDao - BookUpdate : {}", vo);
+		return (Integer) sqlSession.update("book.bookUpdate", vo);
 	}
 	
-	
+	 
 	@Override
 	public BookVO BookSelect(String rvNo) {
+		logger.debug("BookDao - BookSelect : {}", rvNo);
 		return (BookVO) sqlSession.selectOne("book.bookSelect", rvNo);
 	} 
 	
 	
 	@Override
 	public int BookDelete(int rvReNo) {
-		return sqlSession.selectOne("book.bookDelete", rvReNo);
+		logger.debug("BookDao - BookDelete : {}", rvReNo);
+		return sqlSession.delete("book.bookDelete", rvReNo);
 	}
 	
 	

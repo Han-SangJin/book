@@ -15,7 +15,7 @@ public interface BookDaoI {
 	public List<BookVO> BookList();
 
 	// 책정보 수정
-	public String BookUpdate(BookVO vo);
+	public int BookUpdate(BookVO vo);
 
 	// 수정할 책 불러오기
 	public BookVO BookSelect(String bkIsbn);
